@@ -1,0 +1,18 @@
+# idea
+.idea
+nbproject
+.buildpath
+.project
+.settings
+
+# composer vendor dir
+/vendor
+
+# composer itself is not needed
+composer.phar
+
+# trash
+Thumbs.db
+.DS_Store
+.temp
+.tmp
