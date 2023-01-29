@@ -17,11 +17,42 @@ $config = [
             'enableCsrfCookie'       => false,
             'enableCookieValidation' => false,
         ],
+        'response'   => [
+            'class'         => Response::class,
+            'format'        => Response::FORMAT_JSON,
+            'on beforeSend' => static function ($event) {
+                $response = $event->sender;
+                if ($response->data !== null)
+                {
+                    $response->data = [
+                        'status_code' => $response->statusCode,
+                        'message'     => $response->isSuccessful ? 'ok' : 'error',
+                        'data'        => $response->data,
+                    ];
+                }
+            },
+            'formatters'    => [
+                Response::FORMAT_JSON => [
+                    'class'         => JsonResponseFormatter::class,
+                    'prettyPrint'   => YII_DEBUG,
+                    'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+                ],
+            ],
+        ],
         'user'       => [
             'identityClass'   => User::class,
             'enableAutoLogin' => false,
             'enableSession'   => false,
             'loginUrl'        => null,
+        ],
+        'urlManager' => [
+            'enablePrettyUrl'     => true,
+            'enableStrictParsing' => true,
+            'showScriptName'      => false,
+            'rules'               => [
+                // '<action:((\w|-)+)>' => 'charts/<action>',
+                'appTopCategory' => 'charts/app-top-category',
+            ],
         ],
         'log'        => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
