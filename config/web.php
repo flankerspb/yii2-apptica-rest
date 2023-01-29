@@ -1,5 +1,6 @@
 <?php
 
+use app\models\AccessLog;
 use app\models\User;
 use yii\web\JsonResponseFormatter;
 use yii\web\JsonParser;
@@ -30,6 +31,9 @@ $config = [
                         'data'        => $response->data,
                     ];
                 }
+            },
+            'on afterSend'  => static function () {
+                AccessLog::create()->save();
             },
             'formatters'    => [
                 Response::FORMAT_JSON => [
