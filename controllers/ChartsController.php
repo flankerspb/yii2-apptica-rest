@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 
+use andreyv\ratelimiter\IpRateLimiter;
 use app\models\Application;
 use app\models\Charts;
 use app\models\Country;
@@ -24,6 +25,33 @@ class ChartsController extends Controller
             'formats' => [
                 'application/json' => Response::FORMAT_JSON
             ],
+        ];
+        $behaviors['rateLimiter'] = [
+            // Use class
+            'class' => IpRateLimiter::class,
+
+            // The maximum number of allowed requests
+            'rateLimit' => 5,
+
+            // The time period for the rates to apply to
+            'timePeriod' => 60,
+
+            // Separate rate limiting for guests and authenticated users
+            // Defaults to false
+            // - false: use one set of rates, whether you are authenticated or not
+            // - true: use separate ratesfor guests and authenticated users
+            'separateRates' => false,
+
+            // Whether to return HTTP headers containing the current rate limiting information
+            'enableRateLimitHeaders' => false,
+
+            // Array of actions on which to apply ratelimiter, if empty - applies to all actions
+            // 'actions' => ['index'],
+
+            // Allows to skip rate limiting for test environment
+            'testMode' => false,
+            // Defines whether proxy enabled, list of headers getting from request ipHeaders. By default ['X-Forwarded-For']
+            'proxyEnabled' => false
         ];
 
         return $behaviors;

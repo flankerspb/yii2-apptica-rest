@@ -12,6 +12,7 @@
         "php": ">=7.4.0",
         "yiisoft/yii2": "~2.0.47",
         "flankerspb/curl": "~1.0.0",
+        "andreyv/yii2-ip-ratelimiter": "2.*",
         "ext-curl": "*",
         "ext-json": "*"
     },
